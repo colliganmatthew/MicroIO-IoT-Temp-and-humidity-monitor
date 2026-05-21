@@ -73,8 +73,8 @@ static void taskErrorHandler(void* /*pv*/) {
             g_state.freeHeapBytes = heap;
         }
 
-        DBG("error", "Health: uptime=%lu ms  heap=%lu B",
-            (unsigned long)millis(), (unsigned long)heap);
+        // DBG("error", "Health: uptime=%lu ms  heap=%lu B",
+        //     (unsigned long)millis(), (unsigned long)heap);
 
         if (heap < HEAP_CRIT_BYTES) {
             char msg[64];
