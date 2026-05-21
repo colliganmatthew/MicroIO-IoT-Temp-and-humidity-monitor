@@ -19,8 +19,7 @@
 //   - Warn if heap drops below HEAP_WARN_BYTES
 // =============================================================================
 
-#define HEAP_WARN_BYTES  20480  // 20 KB
-#define HEAP_CRIT_BYTES   8192  //  8 KB
+// Thresholds come from config.h (HEAP_WARN_BYTES, HEAP_CRIT_BYTES)
 
 static const char* severityStr(ErrorSeverity s) {
     switch (s) {

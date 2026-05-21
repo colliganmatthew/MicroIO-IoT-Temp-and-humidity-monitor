@@ -98,6 +98,7 @@
 // ─── 6. DISPLAY ──────────────────────────────────────────────────────────────
 //
 #define DISPLAY_REFRESH_MS  500     // OLED re-render interval
+#define ERROR_CHECK_MS      1000    // error task queue timeout + health check interval
 
 
 // ─── 7. SCPI / SERIAL ────────────────────────────────────────────────────────
@@ -133,3 +134,8 @@
 
 // Self-test flag — set 0 to skip startup tests
 #define RUN_SELF_TESTS  1
+
+// ─── 9. MEMORY THRESHOLDS ────────────────────────────────────────────────────
+//
+#define HEAP_WARN_BYTES     20480   // warn below 20 KB free heap
+#define HEAP_CRIT_BYTES      8192   // critical below 8 KB
