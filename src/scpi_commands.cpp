@@ -34,6 +34,30 @@
 // Shared single-threaded response buffer (SCPI task processes one cmd at a time)
 static char s_buf[128];
 
+// ─── Forward declarations ─────────────────────────────────────────────────────
+// Allows the registry table to appear before handler definitions below.
+static const char* handleIdn        (const char*);
+static const char* handleRst        (const char*);
+static const char* handleMeasTemp   (const char*);
+static const char* handleMeasHum    (const char*);
+static const char* handleMeasAll    (const char*);
+static const char* handleSensRate   (const char*);
+static const char* handleMqttIntv   (const char*);
+static const char* handleMqttEn     (const char*);
+static const char* handleMqttPub    (const char*);
+static const char* handleMqttStat   (const char*);
+static const char* handleAlrtEn     (const char*);
+static const char* handleAlrtTempHi (const char*);
+static const char* handleAlrtTempLo (const char*);
+static const char* handleAlrtHumHi  (const char*);
+static const char* handleAlrtHumLo  (const char*);
+static const char* handleSystErr    (const char*);
+static const char* handleSystHelp   (const char*);
+static const char* handleSystUptime (const char*);
+static const char* handleSystHeap   (const char*);
+static const char* handleWifiStat   (const char*);
+static const char* handleTestAll    (const char*);
+
 
 // ─── *IDN? ───────────────────────────────────────────────────────────────────
 static const char* handleIdn(const char* /*cmd*/) {
