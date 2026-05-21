@@ -58,7 +58,6 @@ static void taskErrorHandler(void* /*pv*/) {
                 {
                     StateLock lock;
                     g_state.mqttEnabled   = false;
-                    g_state.outputEnabled = false;
                 }
                 Serial.println("[ERROR] CRITICAL — system halted");
                 DBG("error", "CRITICAL halt");
