@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
+#include <Adafruit_SSD1306.h>
 #include "config.h"
 #include "debug.h"
 #include "shared_state.h"
