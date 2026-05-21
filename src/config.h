@@ -38,8 +38,8 @@
 
 // ─── 3. WIFI ─────────────────────────────────────────────────────────────────
 //
-#define WIFI_SSID           "YOUR_SSID"
-#define WIFI_PASSWORD       "YOUR_PASSWORD"
+#define WIFI_SSID           "TP-LINK_8080_EXT"
+#define WIFI_PASSWORD       "70203455"
 #define WIFI_RECONNECT_MS   10000   // attempt reconnect every 10 s when lost
 
 

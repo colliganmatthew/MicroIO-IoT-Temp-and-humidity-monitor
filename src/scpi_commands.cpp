@@ -59,6 +59,38 @@ static const char* handleWifiStat   (const char*);
 static const char* handleTestAll    (const char*);
 
 
+
+// =============================================================================
+// REGISTRY  —  add new commands here only
+// Terminated by sentinel { nullptr, nullptr, nullptr }
+// =============================================================================
+const ScpiCommand g_scpiRegistry[] = {
+    { "*IDN",           handleIdn,       "Instrument identification"              },
+    { "*RST",           handleRst,       "Reset all parameters to defaults"       },
+    { "MEAS:TEMP",      handleMeasTemp,  "Query temperature (C)"                  },
+    { "MEAS:HUM",       handleMeasHum,   "Query humidity (%)"                     },
+    { "MEAS:ALL",       handleMeasAll,   "Query both as JSON"                     },
+    { "SENS:RATE",      handleSensRate,  "Set/query sample interval (ms, min 2000)"},
+    { "MQTT:INTV",      handleMqttIntv,  "Set/query MQTT publish interval (ms)"   },
+    { "MQTT:EN",        handleMqttEn,    "Set/query MQTT publish enable: ON|OFF"  },
+    { "MQTT:PUB",       handleMqttPub,   "Force immediate MQTT publish"           },
+    { "MQTT:STAT",      handleMqttStat,  "Query MQTT connection: 1=connected"     },
+    { "ALRT:EN",        handleAlrtEn,    "Set/query alert enable: ON|OFF"         },
+    { "ALRT:TEMP:HI",   handleAlrtTempHi,"Set/query high temp alert threshold (C)"},
+    { "ALRT:TEMP:LO",   handleAlrtTempLo,"Set/query low  temp alert threshold (C)"},
+    { "ALRT:HUM:HI",    handleAlrtHumHi, "Set/query high humidity alert (%%)"    },
+    { "ALRT:HUM:LO",    handleAlrtHumLo, "Set/query low  humidity alert (%%)"    },
+    { "SYST:ERR",       handleSystErr,   "Query and clear last error"             },
+    { "SYST:HELP",      handleSystHelp,  "List all commands"                      },
+    { "SYST:UPTIME",    handleSystUptime,"Query uptime (ms)"                      },
+    { "SYST:HEAP",      handleSystHeap,  "Query free heap (bytes)"                },
+    { "WIFI:STAT",      handleWifiStat,  "Query WiFi connection: 1=connected"     },
+    { "TEST:ALL",       handleTestAll,   "Run built-in self-test"                 },
+    { nullptr,          nullptr,         nullptr                                  },
+};
+
+
+
 // ─── *IDN? ───────────────────────────────────────────────────────────────────
 static const char* handleIdn(const char* /*cmd*/) {
     DBG("scpi", "*IDN? received");
@@ -322,37 +354,6 @@ static const char* handleTestAll(const char* /*cmd*/) {
     DBG("scpi", "TEST:ALL -> %s", pass ? "PASS" : "FAIL");
     return pass ? "+0,\"Self-test passed\"" : "-330,\"Self-test failed\"";
 }
-
-
-// =============================================================================
-// REGISTRY  —  add new commands here only
-// Terminated by sentinel { nullptr, nullptr, nullptr }
-// =============================================================================
-const ScpiCommand g_scpiRegistry[] = {
-    { "*IDN",           handleIdn,       "Instrument identification"              },
-    { "*RST",           handleRst,       "Reset all parameters to defaults"       },
-    { "MEAS:TEMP",      handleMeasTemp,  "Query temperature (C)"                  },
-    { "MEAS:HUM",       handleMeasHum,   "Query humidity (%)"                     },
-    { "MEAS:ALL",       handleMeasAll,   "Query both as JSON"                     },
-    { "SENS:RATE",      handleSensRate,  "Set/query sample interval (ms, min 2000)"},
-    { "MQTT:INTV",      handleMqttIntv,  "Set/query MQTT publish interval (ms)"   },
-    { "MQTT:EN",        handleMqttEn,    "Set/query MQTT publish enable: ON|OFF"  },
-    { "MQTT:PUB",       handleMqttPub,   "Force immediate MQTT publish"           },
-    { "MQTT:STAT",      handleMqttStat,  "Query MQTT connection: 1=connected"     },
-    { "ALRT:EN",        handleAlrtEn,    "Set/query alert enable: ON|OFF"         },
-    { "ALRT:TEMP:HI",   handleAlrtTempHi,"Set/query high temp alert threshold (C)"},
-    { "ALRT:TEMP:LO",   handleAlrtTempLo,"Set/query low  temp alert threshold (C)"},
-    { "ALRT:HUM:HI",    handleAlrtHumHi, "Set/query high humidity alert (%%)"    },
-    { "ALRT:HUM:LO",    handleAlrtHumLo, "Set/query low  humidity alert (%%)"    },
-    { "SYST:ERR",       handleSystErr,   "Query and clear last error"             },
-    { "SYST:HELP",      handleSystHelp,  "List all commands"                      },
-    { "SYST:UPTIME",    handleSystUptime,"Query uptime (ms)"                      },
-    { "SYST:HEAP",      handleSystHeap,  "Query free heap (bytes)"                },
-    { "WIFI:STAT",      handleWifiStat,  "Query WiFi connection: 1=connected"     },
-    { "TEST:ALL",       handleTestAll,   "Run built-in self-test"                 },
-    { nullptr,          nullptr,         nullptr                                  },
-};
-
 
 // =============================================================================
 // Dispatcher — do not edit; only edit the registry above

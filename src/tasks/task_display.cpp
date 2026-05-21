@@ -95,8 +95,8 @@ static void taskOledDisplay(void* /*pv*/) {
 
         g_display.display();
 
-        DBG("display", "Rendered T=%.1f H=%.1f wifi=%d mqtt=%d",
-            temperature, humidity, wifiOk, mqttOk);
+        // DBG("display", "Rendered T=%.1f H=%.1f wifi=%d mqtt=%d",
+        //     temperature, humidity, wifiOk, mqttOk);
 
         vTaskDelay(pdMS_TO_TICKS(DISPLAY_REFRESH_MS));
     }
