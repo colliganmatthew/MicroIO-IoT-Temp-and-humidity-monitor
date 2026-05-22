@@ -1,4 +1,4 @@
-#include "task_sensor.h"
+#include "task_DHT.h"
 #include "../core/shared_state.h"
 #include "../config.h"
 #include "../core/debug.h"
@@ -50,7 +50,7 @@ static void taskDhtSensor(void* /*pv*/) {
             pushError(ErrorSeverity::WARNING, "DHT11 read failed");
             {
                 StateLock lock;
-                g_state.sensorOk = false;
+                g_state.DHT_Ok = false;
             }
         } else {
             DBG("sensor", "T=%.1f C  H=%.1f %%  interval=%lu ms",
@@ -60,7 +60,7 @@ static void taskDhtSensor(void* /*pv*/) {
                 StateLock lock;
                 g_state.temperature  = temperature;
                 g_state.humidity     = humidity;
-                g_state.sensorOk     = true;
+                g_state.DHT_Ok     = true;
                 g_state.lastSampleMs = millis();
             }
 
@@ -98,7 +98,7 @@ static void taskDhtSensor(void* /*pv*/) {
     }
 }
 
-void taskSensorStart() {
+void taskDHTStart() {
     xTaskCreatePinnedToCore(
         taskDhtSensor, "DhtSensor",
         STACK_SENSOR, nullptr,
@@ -107,10 +107,10 @@ void taskSensorStart() {
     );
 }
 
-void taskSensorSelfTest() {
-    DBG("sensor", "Self-test: init DHT on GPIO %d", DHT_PIN);
-    Serial.printf("[TEST][Sensor] DHT11 on GPIO %d  sample_ms=%d\n",
-                  DHT_PIN, SENSOR_SAMPLE_INTERVAL_MS);
+void taskDHTSelfTest() {
+    DBG("DHT", "Self-test: init DHT on GPIO %d", DHT_PIN);
+    Serial.printf("[TEST][DHT] DHT11 on GPIO %d  sample_ms=%d\n",
+                  DHT_PIN, DHT_SAMPLE_INTERVAL_MS);
 
     s_dht.begin();
     vTaskDelay(pdMS_TO_TICKS(1500));
@@ -119,9 +119,9 @@ void taskSensorSelfTest() {
     float h = s_dht.readHumidity();
 
     if (isnan(t) || isnan(h)) {
-        Serial.println("[TEST][Sensor] Read: FAIL (NaN — check wiring)");
+        Serial.println("[TEST][DHT] Read: FAIL (NaN — check wiring)");
         pushError(ErrorSeverity::FAULT, "DHT11 self-test failed");
     } else {
-        Serial.printf("[TEST][Sensor] Read: PASS  T=%.1f C  H=%.1f %%\n", t, h);
+        Serial.printf("[TEST][DHT] Read: PASS  T=%.1f C  H=%.1f %%\n", t, h);
     }
 }
