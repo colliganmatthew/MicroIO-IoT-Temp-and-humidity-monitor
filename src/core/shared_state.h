@@ -38,11 +38,14 @@ struct SensorState {
     // ── Live sensor data ──────────────────────────────────────────────────────
     float    temperature    = 0.0f;     // degrees Celsius
     float    humidity       = 0.0f;     // percent relative humidity
-    bool     sensorOk       = false;    // true = last read was valid
+    bool     DHT_Ok       = false;    // true = last read was valid
+    bool     motionDetected = false;    // true = PI Sensor detected movement
+    bool     pirReady       = false;    // true = pir warmup period complete
+    uint32_t lastMotionMs   = 0;        // millis() of last successful motion detection
     uint32_t lastSampleMs   = 0;        // millis() of last successful read
 
     // ── Runtime-tunable parameters (changeable via SCPI) ──────────────────────
-    uint32_t sampleIntervalMs   = SENSOR_SAMPLE_INTERVAL_MS;
+    uint32_t sampleIntervalMs   = DHT_SAMPLE_INTERVAL_MS;
     uint32_t mqttIntervalMs     = MQTT_PUBLISH_INTERVAL_MS;
     bool     mqttEnabled        = true;     // MQTT:EN ON|OFF
     bool     alertsEnabled      = true;     // ALRT:EN ON|OFF
