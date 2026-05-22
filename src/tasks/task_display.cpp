@@ -31,14 +31,16 @@ static void taskOledDisplay(void* /*pv*/) {
     for (;;) {
         // ── Snapshot state (lock held for microseconds) ───────────────────────
         float    temperature, humidity;
-        bool     sensorOk, wifiOk, mqttOk, sysOk;
+        bool     DHT_Ok, motion, PirReady, wifiOk, mqttOk, sysOk;
         uint32_t heap;
         uint32_t sampleAgeMs;
         {
             StateLock lock;
             temperature  = g_state.temperature;
             humidity     = g_state.humidity;
-            sensorOk     = g_state.sensorOk;
+            DHT_Ok       = g_state.DHT_Ok;
+            motion       = g_state.motionDetected;
+            PirReady     = g_state.pirReady;
             wifiOk       = g_state.wifiConnected;
             mqttOk       = g_state.mqttConnected;
             sysOk        = g_state.systemOk;
@@ -46,7 +48,7 @@ static void taskOledDisplay(void* /*pv*/) {
             sampleAgeMs  = millis() - g_state.lastSampleMs;
         }
 
-        bool stale = sensorOk && (sampleAgeMs > 30000); // warn if >30 s old
+        bool stale = DHT_Ok && (sampleAgeMs > 30000); // warn if >30 s old
 
         // ── Render ────────────────────────────────────────────────────────────
         g_display.clearDisplay();
@@ -65,7 +67,7 @@ static void taskOledDisplay(void* /*pv*/) {
 
         // Row 2: temperature
         g_display.setCursor(0, 14);
-        if (sensorOk) {
+        if (DHT_Ok) {
             g_display.printf("Temp: %5.1f C%s", temperature, stale ? "?" : " ");
         } else {
             g_display.print("Temp: --- C");
@@ -73,20 +75,28 @@ static void taskOledDisplay(void* /*pv*/) {
 
         // Row 3: humidity
         g_display.setCursor(0, 26);
-        if (sensorOk) {
+        if (DHT_Ok) {
             g_display.printf("Hum:  %5.1f %%%s", humidity, stale ? "?" : " ");
         } else {
             g_display.print("Hum:  --- %");
         }
 
-        // Row 4: connectivity status
-        g_display.setCursor(0, 38);
+        // Row 4: Motion
+        g_display.setCursor(0,38);
+        if (!PirReady) {
+            g_display.print("PIR: Warming up");
+        } else {
+            g_display.printf("PIR: %s", motion ? "MOTION" : "clear");
+        }
+
+        // Row 5: connectivity status
+        g_display.setCursor(0, 50);
         g_display.printf("WiFi:%-2s  MQTT:%-2s",
                          wifiOk ? "OK" : "--",
                          mqttOk ? "OK" : "--");
 
-        // Row 5: heap or fault banner
-        g_display.setCursor(0, 50);
+        // Row 6: heap or fault banner
+        g_display.setCursor(0, 62);
         if (!sysOk) {
             g_display.print("!!! SYSTEM FAULT !!!");
         } else {
