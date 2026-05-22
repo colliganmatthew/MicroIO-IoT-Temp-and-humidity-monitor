@@ -5,7 +5,8 @@
 #include "core/debug.h"
 #include "core/shared_state.h"
 #include "tasks/task_wifi.h"
-#include "tasks/task_sensor.h"
+#include "tasks/task_DHT.h"
+#include "tasks/task_PIR.h"
 #include "tasks/task_serial.h"
 #include "tasks/task_scpi.h"
 #include "tasks/task_mqtt.h"
@@ -54,7 +55,8 @@ void setup() {
 #if RUN_SELF_TESTS
     Serial.println("--- Self-tests ---");
     taskDisplaySelfTest();  // also calls g_display.begin()
-    taskSensorSelfTest();   // reads one sample to confirm wiring
+    taskDHTSelfTest();   // reads one sample to confirm wiring
+    taskPIRSelfTest(); //verify and allow for warm up
     taskSerialSelfTest();
     taskScpiSelfTest();
     taskMqttSelfTest();
@@ -74,7 +76,8 @@ void setup() {
     // Core 0 (comms + sensing):
     taskWifiStart();    // Pri 4 — connects WiFi, monitors link
     taskSerialStart();  // Pri 4 — reads UART, pushes lines to queue
-    taskSensorStart();  // Pri 3 — DHT11 sampling loop
+    taskDHTStart();  // Pri 3 — DHT11 sampling loop
+    taskPIRStart();  //pri 3 - Motion sampling loop
     taskScpiStart();    // Pri 3 — dispatches SCPI commands from queue
     taskMqttStart();    // Pri 2 — broker connection + telemetry publish
     //
