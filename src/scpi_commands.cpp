@@ -35,7 +35,8 @@
 static char s_buf[128];
 
 // ─── Forward declarations ─────────────────────────────────────────────────────
-// Allows the registry table to appear before handler definitions below.
+// Allows the registry table to appear before handler definitions below. 
+// I JUST PREFER IT THIS WAY...
 static const char* handleIdn        (const char*);
 static const char* handleRst        (const char*);
 static const char* handleMeasTemp   (const char*);
@@ -214,7 +215,7 @@ static const char* handleMqttEn(const char* cmd) {
     return nullptr;
 }
 
-// ─── MQTT:PUB ────────────────────────────────────────────────────────────────
+// ─── MQTT:PUB ────────────────────────────────────────────────────────────────61572cleaanclear
 // Forces an immediate MQTT telemetry publish regardless of interval timer.
 static const char* handleMqttPub(const char* /*cmd*/) {
     DBG("scpi", "MQTT:PUB — forcing immediate publish");
