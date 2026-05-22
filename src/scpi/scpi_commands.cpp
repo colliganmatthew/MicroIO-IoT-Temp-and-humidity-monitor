@@ -41,6 +41,8 @@ static const char* handleIdn        (const char*);
 static const char* handleRst        (const char*);
 static const char* handleMeasTemp   (const char*);
 static const char* handleMeasHum    (const char*);
+static const char* handleMeasMotion (const char*);
+static const char* handleMeasMotionLast (const char*);
 static const char* handleMeasAll    (const char*);
 static const char* handleSensRate   (const char*);
 static const char* handleMqttIntv   (const char*);
@@ -61,6 +63,7 @@ static const char* handleTestAll    (const char*);
 
 
 
+
 // =============================================================================
 // REGISTRY  —  add new commands here only
 // Terminated by sentinel { nullptr, nullptr, nullptr }
@@ -70,6 +73,8 @@ const ScpiCommand g_scpiRegistry[] = {
     { "*RST",           handleRst,       "Reset all parameters to defaults"       },
     { "MEAS:TEMP",      handleMeasTemp,  "Query temperature (C)"                  },
     { "MEAS:HUM",       handleMeasHum,   "Query humidity (%)"                     },
+    { "MEAS:MOT",        handleMeasMotion,"Query motion detected 1|0"             },
+    { "MEAS:MOT:LAST",   handleMeasMotionLast,"Query timestamp of last motion (ms)" },
     { "MEAS:ALL",       handleMeasAll,   "Query both as JSON"                     },
     { "SENS:RATE",      handleSensRate,  "Set/query sample interval (ms, min 2000)"},
     { "MQTT:INTV",      handleMqttIntv,  "Set/query MQTT publish interval (ms)"   },
@@ -146,15 +151,33 @@ static const char* handleMeasHum(const char* /*cmd*/) {
     return s_buf;
 }
 
+// ─── MEAS:MOT? ───────────────────────────────────────────────────────────────
+// Returns 1 if motion is currently detected, 0 if not.
+static const char* handleMeasMotion(const char* /*cmd*/) {
+    bool m; bool ready;
+    { StateLock lock; m = g_state.motionDetected; ready = g_state.pirReady; }
+    if (!ready) return "-230,\"PIR warming up\"";
+    DBG("scpi", "MEAS:MOT? -> %d", m);
+    return m ? "1" : "0";
+}
+
+// ─── MEAS:MOT:LAST? ──────────────────────────────────────────────────────────
+// Returns millis() timestamp of the last detected motion.
+static const char* handleMeasMotionLast(const char* /*cmd*/) {
+    uint32_t t; { StateLock lock; t = g_state.lastMotionMs; }
+    snprintf(s_buf, sizeof(s_buf), "%lu", (unsigned long)t);
+    return s_buf;
+}
+
 // ─── MEAS:ALL? ───────────────────────────────────────────────────────────────
-// Returns both measurements as a JSON object.
+// Returns all measurements as a JSON object.
 static const char* handleMeasAll(const char* /*cmd*/) {
     float t, h;
-    bool  ok;
-    { StateLock lock; t = g_state.temperature; h = g_state.humidity; ok = g_state.sensorOk; }
-    if (!ok) return "-230,\"Data corrupt or stale\"";
+    bool  ok, m;
+    { StateLock lock; t = g_state.temperature; h = g_state.humidity; ok = g_state.DHT_Ok && g_state.pirReady; m = g_state.motionDetected;}
+    if (!ok) return "-230,\"Data corrupt or stale OR PIR sensor is not ready\"";
     snprintf(s_buf, sizeof(s_buf),
-             "{\"temp\":%.2f,\"hum\":%.2f}", t, h);
+             "{\"temp\":%.2f,\"hum\":%.2f,\"motion\":%d}", t, h, m);
     DBG("scpi", "MEAS:ALL? -> %s", s_buf);
     return s_buf;
 }
