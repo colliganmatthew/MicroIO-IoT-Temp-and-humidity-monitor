@@ -103,7 +103,7 @@ static const char* handleIdn(const char* /*cmd*/) {
 static const char* handleRst(const char* /*cmd*/) {
     DBG("scpi", "*RST received");
     StateLock lock;
-    g_state.sampleIntervalMs = SENSOR_SAMPLE_INTERVAL_MS;
+    g_state.sampleIntervalMs = DHT_SAMPLE_INTERVAL_MS;
     g_state.mqttIntervalMs   = MQTT_PUBLISH_INTERVAL_MS;
     g_state.mqttEnabled      = true;
     g_state.alertsEnabled    = true;
@@ -121,7 +121,7 @@ static const char* handleRst(const char* /*cmd*/) {
 static const char* handleMeasTemp(const char* /*cmd*/) {
     float t;
     bool  ok;
-    { StateLock lock; t = g_state.temperature; ok = g_state.sensorOk; }
+    { StateLock lock; t = g_state.temperature; ok = g_state.DHT_Ok; }
     if (!ok) {
         DBG("scpi", "MEAS:TEMP? — sensor not ready");
         return "-230,\"Data corrupt or stale\"";
@@ -136,7 +136,7 @@ static const char* handleMeasTemp(const char* /*cmd*/) {
 static const char* handleMeasHum(const char* /*cmd*/) {
     float h;
     bool  ok;
-    { StateLock lock; h = g_state.humidity; ok = g_state.sensorOk; }
+    { StateLock lock; h = g_state.humidity; ok = g_state.DHT_Ok; }
     if (!ok) {
         DBG("scpi", "MEAS:HUM? — sensor not ready");
         return "-230,\"Data corrupt or stale\"";
@@ -225,7 +225,7 @@ static const char* handleMqttPub(const char* /*cmd*/) {
         StateLock lock;
         t    = g_state.temperature;
         h    = g_state.humidity;
-        ok   = g_state.sensorOk;
+        ok   = g_state.DHT_Ok;
         conn = g_state.mqttConnected;
     }
     if (!conn) return "-300,\"Device error: MQTT not connected\"";
@@ -351,7 +351,7 @@ static const char* handleMqttStat(const char* /*cmd*/) {
 // ─── TEST:ALL ────────────────────────────────────────────────────────────────
 static const char* handleTestAll(const char* /*cmd*/) {
     bool pass = true;
-    { StateLock lock; pass = g_state.sensorOk && g_state.systemOk; }
+    { StateLock lock; pass = g_state.DHT_Ok && g_state.systemOk; }
     DBG("scpi", "TEST:ALL -> %s", pass ? "PASS" : "FAIL");
     return pass ? "+0,\"Self-test passed\"" : "-330,\"Self-test failed\"";
 }

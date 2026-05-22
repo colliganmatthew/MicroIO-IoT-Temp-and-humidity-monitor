@@ -75,7 +75,7 @@ void taskScpiSelfTest() {
     scpiDispatch("SENS:RATE 8000");
     scpiDispatch("*RST");
     { uint32_t r; { StateLock lock; r = g_state.sampleIntervalMs; }
-      check("*RST -> sampleIntervalMs restored", r == SENSOR_SAMPLE_INTERVAL_MS); }
+      check("*RST -> sampleIntervalMs restored", r == DHT_SAMPLE_INTERVAL_MS); }
 
     // Unknown command
     scpiDispatch("BOGUS:CMD?");

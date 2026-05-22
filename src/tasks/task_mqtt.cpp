@@ -91,7 +91,7 @@ static void publishTelemetry() {
         StateLock lock;
         t  = g_state.temperature;
         h  = g_state.humidity;
-        ok = g_state.sensorOk;
+        ok = g_state.DHT_Ok;
     }
 
     if (!ok) {
