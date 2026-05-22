@@ -1,7 +1,7 @@
 #include "task_serial.h"
-#include "../shared_state.h"
+#include "../core/shared_state.h"
 #include "../config.h"
-#include "../debug.h"
+#include "../core/debug.h"
 #include <Arduino.h>
 
 // =============================================================================

@@ -2,8 +2,8 @@
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include "config.h"
-#include "debug.h"
-#include "shared_state.h"
+#include "core/debug.h"
+#include "core/shared_state.h"
 #include "tasks/task_wifi.h"
 #include "tasks/task_sensor.h"
 #include "tasks/task_serial.h"

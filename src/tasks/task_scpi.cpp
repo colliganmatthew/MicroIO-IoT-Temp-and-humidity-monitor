@@ -1,8 +1,8 @@
 #include "task_scpi.h"
-#include "../shared_state.h"
-#include "../scpi_commands.h"
+#include "../core/shared_state.h"
+#include "../scpi/scpi_commands.h"
 #include "../config.h"
-#include "../debug.h"
+#include "../core/debug.h"
 #include <Arduino.h>
 #include <string.h>
 
