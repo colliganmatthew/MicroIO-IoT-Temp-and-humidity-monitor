@@ -1,10 +1,10 @@
 #include "scpi_commands.h"
 #include "shared_state.h"
-#include "mqtt_message.h"
 #include "debug.h"
 #include <Arduino.h>
 #include <string.h>
 #include <stdlib.h>
+#include "tasks/task_mqtt.h"
 
 // =============================================================================
 // scpi_commands.cpp  —  every SCPI command handler and the registry table

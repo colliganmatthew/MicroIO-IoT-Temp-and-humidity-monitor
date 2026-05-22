@@ -1,6 +1,5 @@
 #include "task_mqtt.h"
 #include "../shared_state.h"
-#include "../mqtt_message.h"
 #include "../config.h"
 #include "../debug.h"
 #include <Arduino.h>
