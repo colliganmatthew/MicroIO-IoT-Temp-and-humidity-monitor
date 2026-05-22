@@ -49,9 +49,12 @@
 
 
 // ─── 2. HARDWARE PINS ────────────────────────────────────────────────────────
-//
+// DHT PINS
 #define DHT_PIN         4       // GPIO pin connected to DHT11 DATA line
 #define DHT_TYPE        DHT11   // DHT11 or DHT22
+
+// PIR MOTION (HC-SR501) PINS
+#define PIR_PIN         5
 
 // OLED is on the default I2C bus (GPIO 21 = SDA, GPIO 22 = SCL)
 #define OLED_ADDRESS    0x3C
@@ -110,7 +113,12 @@
 // How often the DHT task takes a reading (milliseconds).
 // DHT11 minimum reliable sample interval is 2000 ms.
 // Can be overridden at runtime via SCPI command SENS:RATE <ms>
-#define SENSOR_SAMPLE_INTERVAL_MS   5000
+#define DHT_SAMPLE_INTERVAL_MS   5000
+
+// PIR Motion Sensor
+#define PIR_SAMPLE_INTERVAL_MS   200
+#define PIR_WARMUP_MS            30000 //HC-SR501 requires a 30 second warm up period to stabalise
+
 
 // Threshold alerts — push an error event when exceeded
 #define TEMP_WARN_HIGH_C        35.0f   // warn above this temperature
