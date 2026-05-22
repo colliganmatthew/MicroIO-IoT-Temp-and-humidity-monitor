@@ -1,6 +1,6 @@
 #include "scpi_commands.h"
-#include "shared_state.h"
-#include "debug.h"
+#include "../core/shared_state.h"
+#include "../core/debug.h"
 #include <Arduino.h>
 #include <string.h>
 #include <stdlib.h>
