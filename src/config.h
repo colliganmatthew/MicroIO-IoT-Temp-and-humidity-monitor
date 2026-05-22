@@ -45,10 +45,10 @@
 
 // ─── 4. MQTT ─────────────────────────────────────────────────────────────────
 //
-#define MQTT_BROKER_HOST        "192.168.1.100"
+#define MQTT_BROKER_HOST        "192.168.1.243"
 #define MQTT_BROKER_PORT        1883
-#define MQTT_USERNAME           "your_mqtt_user"
-#define MQTT_PASSWORD           "your_mqtt_pass"
+#define MQTT_USERNAME           ""
+#define MQTT_PASSWORD           ""
 #define MQTT_CLIENT_ID          "esp32-dht11-monitor"
 
 // Topic base — all sensor topics hang off this prefix
