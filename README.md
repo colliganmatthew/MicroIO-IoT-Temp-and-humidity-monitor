@@ -4,9 +4,9 @@ ESP32 · FreeRTOS · MQTT · PlatformIO
 
 A modular ESP32 monitoring platform built on a custom FreeRTOS multi-task
 architecture. Each sensor, communication channel, and output runs as an
-independent pinned task with mutex-protected shared state. Designed to be
-extended — add a new sensor by creating a task file, adding fields to
-shared state, and registering SCPI commands. Nothing else changes.
+independent pinned task with mutex-protected shared state. 
+Designed to be extended by adding a new sensor by creating a task file, adding fields to
+shared state, and registering SCPI commands.
 
 Currently monitors temperature and humidity (DHT11) and motion (HC-SR501),
 displays readings on an SSD1306 OLED, publishes to MQTT on a configurable
