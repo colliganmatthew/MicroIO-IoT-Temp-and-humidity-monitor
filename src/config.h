@@ -1,6 +1,30 @@
 #pragma once
 
 // =============================================================================
+// NAMING CONVENTIONS
+// =============================================================================
+//
+// Prefixes
+// ────────
+//  g_   Global   — shared across multiple files via extern
+//                  e.g. g_state, g_stateMutex, g_serialQueue
+//
+//  s_   Static   — private to a single .cpp file, nothing outside can see it
+//                  e.g. s_dht, s_buf, s_client
+//
+//  p_   Pointer  — holds a memory address rather than a value directly
+//                  e.g. p_display, p_sensor
+//
+//  m_   Member   — belongs to a class or struct instance
+//                  e.g. m_temperature, m_pin
+//
+//  k_   Constant — compile-time value that never changes
+//                  e.g. kMaxRetries, kBufferSize
+//
+
+
+
+// =============================================================================
 // config.h  —  ALL project tunables live here.
 //
 // Sections:
