@@ -79,8 +79,7 @@ output to serial:
 [DBG][display ] Rendered T=23.4 H=55.0 wifi=1 mqtt=1
 ```
 
-When `DEBUG_ENABLED = 0`, all `DBG()` calls compile away entirely — zero
-Flash, zero RAM, zero runtime cost. Flip this before production builds.
+When `DEBUG_ENABLED = 0`, all `DBG()` calls compile away entirely
 
 ---
 
@@ -121,8 +120,8 @@ bool ok;
 // Do slow work (printf, I2C, formatting) here, outside the lock
 ```
 
-`StateLock` is RAII — the mutex is released automatically when the scope
-exits, even on early returns. Never hold the lock while doing slow work.
+`StateLock` is RAII, the mutex is released automatically when the scope
+exits, even on early returns.
 
 ---
 
@@ -139,7 +138,7 @@ exits, even on early returns. Never hold the lock while doing slow work.
 | OLED display  | 1 | 2 | 500 ms screen refresh from shared state snapshot |
 | Error handler | 1 | 1 | Error event queue consumer + heap watchdog |
 
-Each task is independent — a sensor task hanging or being suspended does
+Each task is independent. A sensor task hanging or being suspended does
 not affect any other task. Each task has its own stack sized for its
 specific workload.
 
